@@ -1,5 +1,7 @@
 import { $ } from "bun";
 
+const lessonsFile = Bun.argv[2];
+
 const randomElement = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
 const figlist = await $`figlist`.text();
@@ -12,7 +14,7 @@ const fontList = figlist
   .map((x) => x.trim());
 const randomFont = randomElement(fontList);
 
-const lessonsText = await $`cat lessons.json`.text();
+const lessonsText = await $`cat ${lessonsFile}`.text();
 
 const lessons = JSON.parse(lessonsText);
 const randomLesson = randomElement(lessons);

@@ -10,7 +10,6 @@
     utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs { inherit system; };
-        lessonalyzer_js = ./lessonalyzer.js;
       in
       with pkgs; {
         packages = rec {
@@ -18,7 +17,7 @@
           lessonalyzer = writeShellApplication {
             name = "lessonalyzer";
             runtimeInputs = [ bun figlet lolcat ];
-            text = ''bun ${lessonalyzer_js}'';
+            text = ''bun ${./lessonalyzer.js} ${./lessons.json}'';
           };
         };
 
