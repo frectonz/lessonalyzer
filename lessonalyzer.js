@@ -1,22 +1,19 @@
 import { $ } from "bun";
 
 const lessonsFile = Bun.argv[2];
+if (!lessonsFile) {
+  console.log("no lessons file provided");
+  process.exit(1);
+}
 
-const randomElement = (arr) => arr[Math.floor(Math.random() * arr.length)];
+const rand = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
-const figlist = await $`figlist`.text();
-
-const fontList = figlist
+const fontList = (await $`figlist`.text())
   .split("Figlet control files in this directory:")[0]
   .split("Figlet fonts in this directory:")[1]
   .split("\n")
   .filter((x) => x !== "")
   .map((x) => x.trim());
-const randomFont = randomElement(fontList);
+const lessons = await $`cat ${lessonsFile}`.json();
 
-const lessonsText = await $`cat ${lessonsFile}`.text();
-
-const lessons = JSON.parse(lessonsText);
-const randomLesson = randomElement(lessons);
-
-await $`figlet -f ${randomFont} ${randomLesson} | lolcat -f`;
+await $`figlet -f ${rand(fontList)} ${rand(lessons)} | lolcat -f`;
